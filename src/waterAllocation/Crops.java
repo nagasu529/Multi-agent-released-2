@@ -15,19 +15,19 @@ import java.util.Iterator;
 public class Crops extends SelectApp
 {
 	//Farm information
-        public String cropName;
-        public String farmName;
-        public String farmSize;
-        public String district;
+	public String cropName;
+    public String farmName;
+    public String farmSize;
+    public String district;
         
 	//Calculation factors
-        public double plotSize;
+    public double plotSize;
 	public int cropStage;
 	public int cropValue;
 	public int droughtSensitivity;
 	public int soilType;
-	// We can use ET calculated function which are provieded by FAO database.
-        public double ET;
+	// We can use ET calculated function which are provided by FAO database.
+    public double ET;
 	public double cropKCoefficient;
 	public int  dsValue;
 	public double waterReq;

@@ -74,7 +74,7 @@ public class Farmer extends Agent{
                         farmerInfo.agentType = "Farmer-seller";
                         sd.setType(farmerInfo.agentType);
                         farmerInfo.pricePerMM = 300;
-                        //farmerInfo.sellingStatus = "avalable";
+                        //farmerInfo.sellingStatus = "available";
                         dfd.addServices(sd);
                         System.out.println("");
                         System.out.println("Name: " + farmerInfo.farmerName);
