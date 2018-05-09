@@ -79,109 +79,109 @@ public class FarmerGUI extends JFrame{
 	
     FarmerGUI(Farmer a) {
     	super(a.getLocalName());
-	
-        log = new JTextArea(5,20);
-        log.setMargin(new Insets(5,5,5,5));
-        log.setEditable(false);
-        JScrollPane logScrollPane = new JScrollPane(log);
+        JScrollPane logScrollPane = new JScrollPane();
         myAgent = a;
         
         //Create a file chooser
         choosingDir = new JFileChooser();
-        
-        //Open file button and action listerner
-		textDirButton = new JButton("Open file");
-        textDirButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                JFileChooser chooser = new JFileChooser();
-                int returnVal = chooser.showOpenDialog(FarmerGUI.this);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File f = chooser.getSelectedFile();
-                String filename = f.getAbsolutePath();
-                System.out.println("Farming scheduale uploaded");
-                    //System.out.println(filename);
-                setFileDir(filename);
-                }
-            }
-        });
 	
         //Combobox Buyer/Seler preferences and action listerner.
         String[] agentWorkStirng = {"Seller","Buyer"};
-        JComboBox stageList = new JComboBox(agentWorkStirng);
-        stageList.setSelectedIndex(1);
-        stageList.setEditable(false);
-        stageList.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                if (stageList.getSelectedIndex()==0) {
-                    setAgentStatus("Agent status updated to seller");
-                    myAgent.farmerInfo.agentType = "seller";
-                } else {
-                    setAgentStatus("buyer");
-                    System.out.println("Agent status updated to buyer");
-                    myAgent.farmerInfo.agentType = "buyer";
-                }
-            }
-        });
 
         //Combobox ET0 preference and action listerner.
         String[] etListStrings = { "ET0-Spring", "ET0-Summer", "ET0-Autumn", "ET0-Winter"};
         
-        JPanel controls = new JPanel();
-        controls.add(stageList);
-        controls.add(textDirButton);
-        controls.add(new JLabel("actual water reduction (%)"));
-        actualReducField = new JTextField(15);
-        controls.add(actualReducField);
-        controls.setBorder(BorderFactory.createTitledBorder("Farmer input"));
-        
         
         JPanel p = new JPanel();
-        //p.add(textDirButton);
-        p.add(controls);
-        JComboBox etList = new JComboBox(etListStrings);
-        controls.add(etList);
-        etList.setSelectedIndex(3);
-        etList.setEditable(false);
-        
-        
-                //Calculation button created and action Listerner
-                calculateButton = new JButton("Calculate");
-                controls.add(calculateButton);
-                calculateButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent ev) {
-                        try {
-                            String actualReduc = actualReducField.getText().trim();
-                            setActualReduc(Double.parseDouble(actualReduc));
-                            myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
-                            //fileDirField.setText("");
-                            actualReducField.setText("");
-		}
-		catch (Exception e) {
-                            JOptionPane.showMessageDialog(FarmerGUI.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
-		}
-                    }
-                } );
-        etList.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                if(etList.getSelectedIndex()==0){
-                    setEtSeason(0);
-                    System.out.println("Spring ET0 choosed" + getEtSeason());
-                }else if(etList.getSelectedIndex()==1){
-                    setEtSeason(1);
-                    System.out.println("Summer ET0 choosed");
-                }else if(etList.getSelectedIndex()==2){
-                    setEtSeason(2);
-                    System.out.println("Autumn ET0 choosed");
-                }else {
-                    setEtSeason(3);
-                    System.out.println("Winter ET0 choosed");
-                }
-            }
-        });
         p.add(logScrollPane, BorderLayout.CENTER);
        
         
         getContentPane().add(p, BorderLayout.SOUTH);
+        
+        //Open file button and action listerner
+		textDirButton = new JButton("Open file");
+		textDirButton.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent ae) {
+		        JFileChooser chooser = new JFileChooser();
+		        int returnVal = chooser.showOpenDialog(FarmerGUI.this);
+		        if (returnVal == JFileChooser.APPROVE_OPTION) {
+		            File f = chooser.getSelectedFile();
+		        String filename = f.getAbsolutePath();
+		        System.out.println("Farming scheduale uploaded");
+		            //System.out.println(filename);
+		        setFileDir(filename);
+		        }
+		    }
+		});
+		JComboBox stageList = new JComboBox(agentWorkStirng);
+		stageList.setSelectedIndex(1);
+		stageList.setEditable(false);
+		stageList.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent ae) {
+		        if (stageList.getSelectedIndex()==0) {
+		            setAgentStatus("Agent status updated to seller");
+		            myAgent.farmerInfo.agentType = "seller";
+		        } else {
+		            setAgentStatus("buyer");
+		            System.out.println("Agent status updated to buyer");
+		            myAgent.farmerInfo.agentType = "buyer";
+		        }
+		    }
+		});
+		
+		JPanel controls = new JPanel();
+		getContentPane().add(controls, BorderLayout.NORTH);
+		controls.add(stageList);
+		controls.add(textDirButton);
+		controls.add(new JLabel("actual water reduction (%)"));
+		actualReducField = new JTextField(15);
+		controls.add(actualReducField);
+		controls.setBorder(BorderFactory.createTitledBorder("Farmer input"));
+		JComboBox etList = new JComboBox(etListStrings);
+		controls.add(etList);
+		etList.setSelectedIndex(3);
+		etList.setEditable(false);
+		
+		
+		        //Calculation button created and action Listerner
+		        calculateButton = new JButton("Calculate");
+		        controls.add(calculateButton);
+		        
+        log = new JTextArea(5,20);
+        getContentPane().add(log, BorderLayout.CENTER);
+        log.setMargin(new Insets(5,5,5,5));
+        log.setEditable(false);
+		        calculateButton.addActionListener(new ActionListener() {
+		            public void actionPerformed(ActionEvent ev) {
+		                try {
+		                    String actualReduc = actualReducField.getText().trim();
+		                    setActualReduc(Double.parseDouble(actualReduc));
+		                    myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
+		                    //fileDirField.setText("");
+		                    actualReducField.setText("");
+		}
+		catch (Exception e) {
+		                    JOptionPane.showMessageDialog(FarmerGUI.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
+		}
+		            }
+		        } );
+		        etList.addActionListener(new ActionListener() {
+		            public void actionPerformed(ActionEvent ae) {
+		                if(etList.getSelectedIndex()==0){
+		                    setEtSeason(0);
+		                    System.out.println("Spring ET0 choosed" + getEtSeason());
+		                }else if(etList.getSelectedIndex()==1){
+		                    setEtSeason(1);
+		                    System.out.println("Summer ET0 choosed");
+		                }else if(etList.getSelectedIndex()==2){
+		                    setEtSeason(2);
+		                    System.out.println("Autumn ET0 choosed");
+		                }else {
+		                    setEtSeason(3);
+		                    System.out.println("Winter ET0 choosed");
+		                }
+		            }
+		        });
 		
         // Make the agent terminate when the user closes 
         // the GUI using the button on the upper right corner	
