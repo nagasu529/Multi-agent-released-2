@@ -78,39 +78,19 @@ public class FarmerGUI extends JFrame{
     private JTextArea log;
 	
     FarmerGUI(Farmer a) {
-	super(a.getLocalName());
+    	super(a.getLocalName());
 	
         log = new JTextArea(5,20);
         log.setMargin(new Insets(5,5,5,5));
         log.setEditable(false);
         JScrollPane logScrollPane = new JScrollPane(log);
-	myAgent = a;
+        myAgent = a;
         
         //Create a file chooser
         choosingDir = new JFileChooser();
-	
-        //Open text directory button preference.
-        textDirButton = new JButton("Open file");
-        calculateButton = new JButton("Calculate");
         
-        
-        //Calculation button action Listerner
-	calculateButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                try {
-                    String actualReduc = actualReducField.getText().trim();
-                    setActualReduc(Double.parseDouble(actualReduc));
-                    myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
-                    //fileDirField.setText("");
-                    actualReducField.setText("");
-		}
-		catch (Exception e) {
-                    JOptionPane.showMessageDialog(FarmerGUI.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
-		}
-            }
-        } );
-        
-        //Open file action listerner
+        //Open file button and action listerner
+		textDirButton = new JButton("Open file");
         textDirButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 JFileChooser chooser = new JFileChooser();
@@ -125,7 +105,7 @@ public class FarmerGUI extends JFrame{
             }
         });
 	
-        //Combobox Buyer/Seler preferences.
+        //Combobox Buyer/Seler preferences and action listerner.
         String[] agentWorkStirng = {"Seller","Buyer"};
         JComboBox stageList = new JComboBox(agentWorkStirng);
         stageList.setSelectedIndex(1);
@@ -143,11 +123,44 @@ public class FarmerGUI extends JFrame{
             }
         });
 
-        //Combobox ET0 preference.
+        //Combobox ET0 preference and action listerner.
         String[] etListStrings = { "ET0-Spring", "ET0-Summer", "ET0-Autumn", "ET0-Winter"};
+        
+        JPanel controls = new JPanel();
+        controls.add(stageList);
+        controls.add(textDirButton);
+        controls.add(new JLabel("actual water reduction (%)"));
+        actualReducField = new JTextField(15);
+        controls.add(actualReducField);
+        controls.setBorder(BorderFactory.createTitledBorder("Farmer input"));
+        
+        
+        JPanel p = new JPanel();
+        //p.add(textDirButton);
+        p.add(controls);
         JComboBox etList = new JComboBox(etListStrings);
+        controls.add(etList);
         etList.setSelectedIndex(3);
         etList.setEditable(false);
+        
+        
+                //Calculation button created and action Listerner
+                calculateButton = new JButton("Calculate");
+                controls.add(calculateButton);
+                calculateButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent ev) {
+                        try {
+                            String actualReduc = actualReducField.getText().trim();
+                            setActualReduc(Double.parseDouble(actualReduc));
+                            myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
+                            //fileDirField.setText("");
+                            actualReducField.setText("");
+		}
+		catch (Exception e) {
+                            JOptionPane.showMessageDialog(FarmerGUI.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
+		}
+                    }
+                } );
         etList.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 if(etList.getSelectedIndex()==0){
@@ -165,45 +178,27 @@ public class FarmerGUI extends JFrame{
                 }
             }
         });
-        
-        JPanel controls = new JPanel();
-        controls.add(stageList);
-        controls.add(textDirButton);
-        controls.add(new JLabel("actual water reduction (%)"));
-	actualReducField = new JTextField(15);
-	controls.add(actualReducField);
-        controls.setBorder(BorderFactory.createTitledBorder("Farmer input"));
-        
-        //For layout purposes, put the buttons in a separate panel
-        JPanel p = new JPanel();
-	p.setLayout(new GridLayout(3, 3));
-	//p.add(stageList); 
-	getContentPane().add(p, BorderLayout.CENTER);
-        p = new JPanel();
-	//p.add(textDirButton);
-        p.add(controls);
-        p.add(etList);
-        p.add(calculateButton);
+        p.add(logScrollPane, BorderLayout.CENTER);
        
         
-	getContentPane().add(p, BorderLayout.SOUTH);
+        getContentPane().add(p, BorderLayout.SOUTH);
 		
-	// Make the agent terminate when the user closes 
-	// the GUI using the button on the upper right corner	
-	addWindowListener(new	WindowAdapter() {
+        // Make the agent terminate when the user closes 
+        // the GUI using the button on the upper right corner	
+        addWindowListener(new	WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 myAgent.doDelete();
             }
-	} );
-	setResizable(false);
+        } );
+        setResizable(false);
     }
 	
     public void show() {
-        pack();
-	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	int centerX = (int)screenSize.getWidth() / 2;
-	int centerY = (int)screenSize.getHeight() / 2;
-	setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
-	super.show();
+    	pack();
+    	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    	int centerX = (int)screenSize.getWidth() / 2;
+    	int centerY = (int)screenSize.getHeight() / 2;
+    	setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
+    	super.show();
     }	
 }

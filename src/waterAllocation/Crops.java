@@ -41,33 +41,32 @@ public class Crops extends SelectApp
 	public double waterReduction;
 	public double totalWaterReq;
 	public List<String> list = new ArrayList<String>();
-        public String[] calculationArray;
+    public String[] calculationArray;
 	
-        ArrayList<Double> order = new ArrayList<Double>();		//order array
+    ArrayList<Double> order = new ArrayList<Double>();		//order array
 	ArrayList<String> calList = new ArrayList<String>();	//Crop list Data
         // New list initialization
         
-        ArrayList<cropType> cropT = new ArrayList<cropType>();
-        ArrayList<cropType> resultList = new ArrayList<cropType>();
+    ArrayList<cropType> cropT = new ArrayList<cropType>();
+    ArrayList<cropType> resultList = new ArrayList<cropType>();
 
         
-        //additional parameters which are rules based decision thinking.
-        List<Integer> ds = new ArrayList<>();
-        List<Double> st = new ArrayList<>();
-        List<Double> cv = new ArrayList<>();
+    //additional parameters which are rules based decision thinking.
+    List<Integer> ds = new ArrayList<>();
+    List<Double> st = new ArrayList<>();
+    List<Double> cv = new ArrayList<>();
         
-        SelectApp app = new SelectApp();
+    SelectApp app = new SelectApp();
 
-        public void readText(String fileName){
-            try (Stream<String> stream = Files.lines(Paths.get(fileName))){
-                //stream.forEach(System.out::println);
-                list = stream.collect(Collectors.toList());
-            }
-            catch(IOException e){
-                e.printStackTrace();
-            }
-            String[] infoarray;
-            String separator ="\\s*,";
+    public void readText(String fileName){
+    	try (Stream<String> stream = Files.lines(Paths.get(fileName))){
+    		//stream.forEach(System.out::println);
+            list = stream.collect(Collectors.toList());
+        }catch(IOException e){
+        	e.printStackTrace();
+        }
+        String[] infoarray;
+        String separator ="\\s*,";
             infoarray = list.get(0).split(separator); //split data for farmer information
             farmName = infoarray[0];
             district = infoarray[1];
