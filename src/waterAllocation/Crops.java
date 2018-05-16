@@ -1,3 +1,5 @@
+//How to add Description about this program with Git to My git repository.
+
 package waterAllocation;
 
 import java.io.IOException;
@@ -88,31 +90,33 @@ public class Crops extends SelectApp
 		String[] tempArray = list.get(listSize - 1).split(separator);	//creating temp array for calculate data	
 			//Collecting crop stage
 		cropName = tempArray[0];
-                    if (tempArray[0].equals("Pasture")){
-                        if (tempArray[1].equals("Initial"))
-                            cropStage = 3;
-                        else if (tempArray[1].equals("Development"))
-                            cropStage = 2;
-                        else
-                            cropStage = 1;
-                    }
-                    else{
-                        if (tempArray[1].equals("Flowering") || tempArray.equals("Grain Filling"))
-                            cropStage = 4;
-                        else if (tempArray[1].equals("Germination"))
-                            cropStage = 3;
-                        else if (tempArray[1].equals("Development"))
-                            cropStage = 2;
-                        else
-                            cropStage = 1;
-                    }
-                if (tempArray[2].equals("Low"))
-                    droughtSensitivity = 1;
-                else if (tempArray[2].equals("Medium"))
-                    droughtSensitivity = 2;
+			if (tempArray[0].equals("Pasture")){
+				if (tempArray[1].equals("Initial"))
+					cropStage = 3;
+                else if (tempArray[1].equals("Development"))
+                	cropStage = 2;
                 else
-                    droughtSensitivity = 3;
-
+                	cropStage = 1;
+             }else
+             {
+            	 if (tempArray[1].equals("Flowering") || tempArray.equals("Grain Filling"))
+            		 cropStage = 4;
+            	 else if (tempArray[1].equals("Germination"))
+            		 cropStage = 3;
+                 else if (tempArray[1].equals("Development"))
+                	 cropStage = 2;
+                 else
+                	 cropStage = 1;
+              }
+			if (tempArray[2].equals("Low")) {
+				droughtSensitivity = 1;
+			}
+            else if (tempArray[2].equals("Medium")) {
+            	droughtSensitivity = 2;
+            }
+            else
+            	droughtSensitivity = 3;
+                
                 plotSize = Double.parseDouble(tempArray[3]);
                 yieldAmount = Double.parseDouble(tempArray[4]);
                 pricePerKg = Double.parseDouble(tempArray[5]);
@@ -148,17 +152,7 @@ public class Crops extends SelectApp
 
 		listSize --;
             }
-            /*
-            Iterator itr=cropT.iterator();
             
-            //traverse elements of ArrayList object  
-            while(itr.hasNext()){  
-            cropType st = (cropType)itr.next();
-                System.out.println(st.cropEU + " " + st.cropName + " " + st.cropStage +
-                        " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
-                        " " + literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction);
-            }
-            */
             calcCropEU();
         }
         
