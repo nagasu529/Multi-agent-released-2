@@ -32,6 +32,8 @@ public class Farmer extends Agent{
     double volumeToBuy;
     double sellingPrice;
     double buyingPrice;
+    String log = "";
+    
     //The list of known water selling agent
     private AID[] sellerAgent;
     
@@ -62,6 +64,8 @@ public class Farmer extends Agent{
 		} catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
+        //log.concat("Hello "+ getAID().getName() + "Stage is " + sd.getType()+"\n");
+        
         System.out.println("Hello "+ getAID().getName() + "Stage is " + sd.getType());
         
         //Add a TickerBehaviour that chooses agent status to buyer or seller.
@@ -413,6 +417,7 @@ public class Farmer extends Agent{
     }
     */
     
+   
     protected void takeDown() {
         try {
             DFService.deregister(this);

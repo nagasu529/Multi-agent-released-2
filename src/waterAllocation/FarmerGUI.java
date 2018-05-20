@@ -151,20 +151,22 @@ public class FarmerGUI extends JFrame{
         getContentPane().add(log, BorderLayout.CENTER);
         log.setMargin(new Insets(5,5,5,5));
         log.setEditable(false);
-		        calculateButton.addActionListener(new ActionListener() {
-		            public void actionPerformed(ActionEvent ev) {
-		                try {
-		                    String actualReduc = actualReducField.getText().trim();
-		                    setActualReduc(Double.parseDouble(actualReduc));
-		                    myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
-		                    //fileDirField.setText("");
-		                    actualReducField.setText("");
-		}
-		catch (Exception e) {
-		                    JOptionPane.showMessageDialog(FarmerGUI.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
-		}
-		            }
-		        } );
+        //log.append(myAgent.a);
+        
+		calculateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				try {
+					String actualReduc = actualReducField.getText().trim();
+		            setActualReduc(Double.parseDouble(actualReduc));
+		            myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
+		            //fileDirField.setText("");
+		            actualReducField.setText("");
+				}
+				catch (Exception e) {
+					JOptionPane.showMessageDialog(FarmerGUI.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
+				}
+			}
+		} );
 		        etList.addActionListener(new ActionListener() {
 		            public void actionPerformed(ActionEvent ae) {
 		                if(etList.getSelectedIndex()==0){
