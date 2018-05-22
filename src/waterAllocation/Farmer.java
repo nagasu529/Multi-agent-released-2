@@ -32,7 +32,7 @@ public class Farmer extends Agent{
     double volumeToBuy;
     double sellingPrice;
     double buyingPrice;
-    String log = "";
+    StringBuilder logAgent = new StringBuilder();
     
     //The list of known water selling agent
     private AID[] sellerAgent;
@@ -64,9 +64,9 @@ public class Farmer extends Agent{
 		} catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
-        //log.concat("Hello "+ getAID().getName() + "Stage is " + sd.getType()+"\n");
         
         System.out.println("Hello "+ getAID().getName() + "Stage is " + sd.getType());
+        myGui.setDisplay(logAgent.append("Hello "+ getAID().getName() + "Stage is " + sd.getType()).toString());
         
         //Add a TickerBehaviour that chooses agent status to buyer or seller.
         addBehaviour(new TickerBehaviour(this, 10000) {
@@ -160,21 +160,24 @@ public class Farmer extends Agent{
                         break;
                     case 1:
                         calCrops.ET0Summer();
-                        //System.out.println("ET0 summer choosed");
+                        
                         break;
                     case 2:
                         calCrops.ET0Autumn();
-                        //System.out.println("ET0 autumn choosed");
+                        
                         break;
                     default:
                         calCrops.ET0Winter();
-                        //System.out.println("ET0 winter choosed");
+                        
                 }
                 calCrops.ET = calCrops.avgET0;
                 calCrops.farmFactorValues();
                 double actualReduction = calCrops.calcWaterReduction(totalWaterReductionPctg);
                 System.out.println("");
                 System.out.println("Water reduction result:");
+                logAgent.append("\n");
+                logAgent.append("Water reduction result:\n");
+                logAgent.append("\n");
             
                 //Result calculation
                 System.out.println("");
@@ -184,8 +187,16 @@ public class Farmer extends Agent{
                     System.out.println(st.cropName + " " + st.cropStage +
                         " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
                         " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction);
+                    logAgent.append(st.cropName + " " + st.cropStage +
+                        " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
+                        " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction + "\n");
                 }   
                 System.out.println("Actual reduction is: " + actualReduction);
+                logAgent.append("Actual reduction is: " + actualReduction + "\n");
+                logAgent.append("\n");
+                //log.toString();
+                //System.out.println(c);
+                //myGui.setDisplay(c);
             
                 //Clean parameter
                 calCrops.resultList.clear();
@@ -198,9 +209,7 @@ public class Farmer extends Agent{
                 if (actualReduction >= (calCrops.totalWaterReq*totalWaterReductionPctg)) {
                     farmerInfo.agentType = "seller";
                     farmerInfo.waterVolumn = actualReduction;
-                } //else {
-                    //agentStatus = "buyer";
-                //}
+                }
             }
         } );
     }
