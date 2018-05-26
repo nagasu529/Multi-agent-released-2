@@ -65,14 +65,13 @@ public class Farmer extends Agent{
 			fe.printStackTrace();
 		}
         
-        System.out.println("Hello "+ getAID().getName() + "Stage is " + sd.getType());
-        myGui.setDisplay(logAgent.append("Hello "+ getAID().getName() + "Stage is " + sd.getType()).toString());
+        logAgent.append("Hello "+ getAID().getName() + "\n" + "Stage is " + sd.getType() + "\n");
+        myGui.displayUI(logAgent.toString());
         
         //Add a TickerBehaviour that chooses agent status to buyer or seller.
         addBehaviour(new TickerBehaviour(this, 10000) {
 	    protected void onTick() {
-	    	System.out.println("Agent status is " + farmerInfo.agentType);
-	    	
+	    	logAgent.append("Agent status is " + farmerInfo.agentType + "\n");
                     if (farmerInfo.agentType=="seller"||farmerInfo.agentType=="Farmer-seller") {
                     	//Register the seller description service on yellow pages.
                         farmerInfo.agentType = "Farmer-seller";
@@ -80,24 +79,20 @@ public class Farmer extends Agent{
                         farmerInfo.pricePerMM = 300;
                         //farmerInfo.sellingStatus = "available";
                         dfd.addServices(sd);
-                        System.out.println("");
-                        System.out.println("Name: " + farmerInfo.farmerName);
-                        System.out.println("Status: " + farmerInfo.agentType);
-                        System.out.println("Volumn to sell: " + farmerInfo.waterVolumn);
-                        System.out.println("Selling price: " + farmerInfo.pricePerMM);
-                        System.out.println("Selling status: " + farmerInfo.sellingStatus);
-                        System.out.println("");
-                        System.out.println("preparing to sell");
-                        System.out.println("");
+                        logAgent.append("");
+                        logAgent.append("Name: " + farmerInfo.farmerName + "\n");
+                        logAgent.append("Status: " + farmerInfo.agentType + "\n");
+                        logAgent.append("Volumn to sell: " + farmerInfo.waterVolumn + "\n");
+                        logAgent.append("Selling price: " + farmerInfo.pricePerMM + "\n");
+                        logAgent.append("Selling status: " + farmerInfo.sellingStatus + "\n");
+                        logAgent.append("" + "\n");
+                        logAgent.append("preparing to sell" + "\n");
+                        logAgent.append("" + "\n");
+                        myGui.displayUI(logAgent.toString());
                         
                         /*
                         ** Selling water process
                         */
-                        //Catalogue updating
-                        
-                        //sellingPrice = 0.2;
-                        //updateCatalogue(sd.getName(), sd.getType(), volumeToSell,sellingPrice);
-                        // Add the behaviour queries from buyer agents
                         
                         addBehaviour(new OfferRequestsServer());
                         
@@ -110,13 +105,15 @@ public class Farmer extends Agent{
                         farmerInfo.pricePerMM = 300;
                         farmerInfo.waterVolumn = 3935.868;
                         farmerInfo.sellingStatus = "unknown";
-                        System.out.println("Name: " + farmerInfo.farmerName);
-                        System.out.println("Status: " + farmerInfo.agentType);
-                        System.out.println("Volumn to buy: " + farmerInfo.waterVolumn);
-                        System.out.println("Buying price:" + farmerInfo.pricePerMM);
-                        System.out.println("Selling status: " + farmerInfo.sellingStatus);
-                        System.out.println("");
-                        System.out.println("Lookign to buy water");
+                        logAgent.append("Lookign to buy water" + "\n");
+                        logAgent.append("Name: " + farmerInfo.farmerName + "\n");
+                        logAgent.append("Status: " + farmerInfo.agentType + "\n");
+                        logAgent.append("Volumn to buy: " + farmerInfo.waterVolumn + "\n");
+                        logAgent.append("Buying price:" + farmerInfo.pricePerMM + "\n");
+                        logAgent.append("Selling status: " + farmerInfo.sellingStatus + "\n");
+                        logAgent.append("" + "\n");
+                        logAgent.append("Lookign to buy water" + "\n");
+                        myGui.displayUI(logAgent.toString());
                         
                         /*
                         ** Buying water process
@@ -194,9 +191,6 @@ public class Farmer extends Agent{
                 System.out.println("Actual reduction is: " + actualReduction);
                 logAgent.append("Actual reduction is: " + actualReduction + "\n");
                 logAgent.append("\n");
-                //log.toString();
-                //System.out.println(c);
-                //myGui.setDisplay(c);
             
                 //Clean parameter
                 calCrops.resultList.clear();

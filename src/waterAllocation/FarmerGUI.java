@@ -42,7 +42,7 @@ public class FarmerGUI extends JFrame{
     public static Double sActualReduc;
     public static int sEtSeason;
     public static String sAgentStatus;
-    public static String sDisplay;
+    
     
     public void setFileDir(String fileDir){
         sFileDir = fileDir;
@@ -73,15 +73,6 @@ public class FarmerGUI extends JFrame{
         return sAgentStatus;
     }
     
-    //Log file update
-    
-    public void setDisplay(String display) {
-    	sDisplay = display;
-    }
-    public static String getDisplay() {
-    	return sDisplay;
-    }
-    
     //GUI design preferences
     private JTextField actualReducField;
     private JButton calculateButton, textDirButton;
@@ -110,9 +101,7 @@ public class FarmerGUI extends JFrame{
 		        if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File f = chooser.getSelectedFile();
 		        String filename = f.getAbsolutePath();
-		        setDisplay("Farming scheduale uploaded\n");
-		        log.append(getDisplay());
-	            log.setCaretPosition(log.getDocument().getLength());
+		        displayUI("Farming scheduale uploaded\n");
 		        //System.out.println("Farming scheduale uploaded");
 		            //System.out.println(filename);
 		        setFileDir(filename);
@@ -127,15 +116,12 @@ public class FarmerGUI extends JFrame{
 		        if (stageList.getSelectedIndex()==0) {
 		            setAgentStatus("seller");
 		            myAgent.farmerInfo.agentType = "seller";
-		            setDisplay("Agent status updated to seller\n");
-		            log.append(getDisplay());
-		            log.setCaretPosition(log.getDocument().getLength());
+		            displayUI("Agent status updated to seller\n");
+		          
 		        } else {
 		            setAgentStatus("buyer");
 		            //System.out.println("Agent status updated to buyer");
-		            setDisplay("Agent status updated to buyer\n");
-		            log.append(getDisplay());
-		            log.setCaretPosition(log.getDocument().getLength());
+		            displayUI("Agent status updated to buyer\n");
 		            myAgent.farmerInfo.agentType = "buyer";
 		        }
 		    }
@@ -158,7 +144,9 @@ public class FarmerGUI extends JFrame{
         log = new JTextArea(5,20);
         log.setEditable(false);
         getContentPane().add(log, BorderLayout.CENTER);
-        log.setMargin(new Insets(5,5,5,5));
+        log.setMargin(new Insets(5,5,50,5));
+        JScrollPane logScrollPane = new JScrollPane(log);
+        getContentPane().add(logScrollPane, BorderLayout.CENTER);
 		
 		//Calculation button created and action Listener
 		calculateButton = new JButton("Calculate");
@@ -171,8 +159,7 @@ public class FarmerGUI extends JFrame{
 		            myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
 		            //fileDirField.setText("");
 		            actualReducField.setText("");
-		            log.append(getDisplay());
-		            log.setCaretPosition(log.getDocument().getLength());
+		            displayUI(myAgent.logAgent.toString());
 				}
 				catch (Exception e) {
 					JOptionPane.showMessageDialog(FarmerGUI.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 
@@ -183,29 +170,20 @@ public class FarmerGUI extends JFrame{
 		            public void actionPerformed(ActionEvent ae) {
 		                if(etList.getSelectedIndex()==0){
 		                    setEtSeason(0);
-		                    setDisplay("Spring ET0 choosed\n");
-		                    //System.out.println("Spring ET0 choosed");
-		                    log.append(getDisplay());
-		                    log.setCaretPosition(log.getDocument().getLength());
+		                    displayUI("Spring ET0 choosed\n");
 		                    
 		                }else if(etList.getSelectedIndex()==1){
 		                    setEtSeason(1);
 		                    //System.out.println("Summer ET0 choosed");
-		                    setDisplay("Summer ET0 choosed\n");
-				            log.append(getDisplay());
-				            log.setCaretPosition(log.getDocument().getLength());
+		                    displayUI("Summer ET0 choosed\n");
 		                }else if(etList.getSelectedIndex()==2){
 		                    setEtSeason(2);
 		                    //System.out.println("Autumn ET0 choosed");
-		                    setDisplay("Autumn ET0 choosed\n");
-				            log.append(getDisplay());
-				            log.setCaretPosition(log.getDocument().getLength());
+		                    displayUI("Autumn ET0 choosed\n");
 		                }else {
 		                    setEtSeason(3);
 		                    //System.out.println("Winter ET0 choosed");
-		                    setDisplay("Winter ET0 choosed\n");
-				            log.append(getDisplay());
-				            log.setCaretPosition(log.getDocument().getLength());
+		                    displayUI("Winter ET0 choosed\n");
 		                }
 		            }
 		        });
@@ -227,5 +205,10 @@ public class FarmerGUI extends JFrame{
     	int centerY = (int)screenSize.getHeight() / 2;
     	setLocation(centerX - getWidth() / 2, centerY - getHeight() / 2);
     	super.show();
-    }	
+    }
+    
+    public void displayUI(String displayUI) {
+    	log.append(displayUI);
+    	log.setCaretPosition(log.getDocument().getLength());
+    }
 }
