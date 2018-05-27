@@ -156,10 +156,10 @@ public class FarmerGUI extends JFrame{
 				try {
 					String actualReduc = actualReducField.getText().trim();
 		            setActualReduc(Double.parseDouble(actualReduc));
-		            myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
+		            displayUI(myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason()));
 		            //fileDirField.setText("");
 		            actualReducField.setText("");
-		            displayUI(myAgent.logAgent.toString());
+		            
 				}
 				catch (Exception e) {
 					JOptionPane.showMessageDialog(FarmerGUI.this, "Invalid values. "+e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); 

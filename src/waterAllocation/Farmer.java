@@ -32,7 +32,6 @@ public class Farmer extends Agent{
     double volumeToBuy;
     double sellingPrice;
     double buyingPrice;
-    StringBuilder logAgent = new StringBuilder();
     
     //The list of known water selling agent
     private AID[] sellerAgent;
@@ -64,14 +63,14 @@ public class Farmer extends Agent{
 		} catch (FIPAException fe) {
 			fe.printStackTrace();
 		}
-        
-        logAgent.append("Hello "+ getAID().getName() + "\n" + "Stage is " + sd.getType() + "\n");
-        myGui.displayUI(logAgent.toString());
+       
+        myGui.displayUI("Hello "+ getAID().getName() + "\n" + "Stage is " + sd.getType() + "\n");
         
         //Add a TickerBehaviour that chooses agent status to buyer or seller.
         addBehaviour(new TickerBehaviour(this, 10000) {
 	    protected void onTick() {
-	    	logAgent.append("Agent status is " + farmerInfo.agentType + "\n");
+	    	
+	    	myGui.displayUI("Agent status is " + farmerInfo.agentType + "\n");
                     if (farmerInfo.agentType=="seller"||farmerInfo.agentType=="Farmer-seller") {
                     	//Register the seller description service on yellow pages.
                         farmerInfo.agentType = "Farmer-seller";
@@ -79,16 +78,14 @@ public class Farmer extends Agent{
                         farmerInfo.pricePerMM = 300;
                         //farmerInfo.sellingStatus = "available";
                         dfd.addServices(sd);
-                        logAgent.append("");
-                        logAgent.append("Name: " + farmerInfo.farmerName + "\n");
-                        logAgent.append("Status: " + farmerInfo.agentType + "\n");
-                        logAgent.append("Volumn to sell: " + farmerInfo.waterVolumn + "\n");
-                        logAgent.append("Selling price: " + farmerInfo.pricePerMM + "\n");
-                        logAgent.append("Selling status: " + farmerInfo.sellingStatus + "\n");
-                        logAgent.append("" + "\n");
-                        logAgent.append("preparing to sell" + "\n");
-                        logAgent.append("" + "\n");
-                        myGui.displayUI(logAgent.toString());
+                        myGui.displayUI("\n");
+                        myGui.displayUI("Name: " + farmerInfo.farmerName + "\n");
+                        myGui.displayUI("Status: " + farmerInfo.agentType + "\n");
+                        myGui.displayUI("Volumn to sell: " + farmerInfo.waterVolumn + "\n");
+                        myGui.displayUI("Selling price: " + farmerInfo.pricePerMM + "\n");
+                        myGui.displayUI("Selling status: " + farmerInfo.sellingStatus + "\n");
+                        myGui.displayUI("Preparing to sell" + "\n");
+                        myGui.displayUI("\n");
                         
                         /*
                         ** Selling water process
@@ -105,15 +102,14 @@ public class Farmer extends Agent{
                         farmerInfo.pricePerMM = 300;
                         farmerInfo.waterVolumn = 3935.868;
                         farmerInfo.sellingStatus = "unknown";
-                        logAgent.append("Lookign to buy water" + "\n");
-                        logAgent.append("Name: " + farmerInfo.farmerName + "\n");
-                        logAgent.append("Status: " + farmerInfo.agentType + "\n");
-                        logAgent.append("Volumn to buy: " + farmerInfo.waterVolumn + "\n");
-                        logAgent.append("Buying price:" + farmerInfo.pricePerMM + "\n");
-                        logAgent.append("Selling status: " + farmerInfo.sellingStatus + "\n");
-                        logAgent.append("" + "\n");
-                        logAgent.append("Lookign to buy water" + "\n");
-                        myGui.displayUI(logAgent.toString());
+                        myGui.displayUI("\n");
+                        myGui.displayUI("Name: " + farmerInfo.farmerName + "\n");
+                        myGui.displayUI("Status: " + farmerInfo.agentType + "\n");
+                        myGui.displayUI("Volumn to sell: " + farmerInfo.waterVolumn + "\n");
+                        myGui.displayUI("Selling price: " + farmerInfo.pricePerMM + "\n");
+                        myGui.displayUI("Selling status: " + farmerInfo.sellingStatus + "\n");
+                        myGui.displayUI("Looking to buy water" + "\n");
+                        myGui.displayUI("\n");
                         
                         /*
                         ** Buying water process
@@ -143,9 +139,12 @@ public class Farmer extends Agent{
     }
     
     //Update input data from GUI which include water allocation on single farm.
-    public void farmerInput(final String filenameGlob, final Double actualRate, final int etSeason) {
+    public String farmerInput(final String filenameGlob, final Double actualRate, final int etSeason) {
+    	StringBuilder resultLog = new StringBuilder();
+    	
         addBehaviour(new OneShotBehaviour() {
             public void action() {
+            	
                 //Input parameters from GUI
                 calCrops.readText(filenameGlob);
                 double totalWaterReductionPctg = actualRate/100;
@@ -170,28 +169,26 @@ public class Farmer extends Agent{
                 calCrops.ET = calCrops.avgET0;
                 calCrops.farmFactorValues();
                 double actualReduction = calCrops.calcWaterReduction(totalWaterReductionPctg);
-                System.out.println("");
-                System.out.println("Water reduction result:");
-                logAgent.append("\n");
-                logAgent.append("Water reduction result:\n");
-                logAgent.append("\n");
+                resultLog.append("\n");
+                resultLog.append("Water reduction result:\n");
+                resultLog.append("\n");
             
                 //Result calculation
-                System.out.println("");
                 Iterator itrR=calCrops.resultList.iterator();
                 while (itrR.hasNext()) {
                     cropType st = (cropType)itrR.next();
-                    System.out.println(st.cropName + " " + st.cropStage +
+                    /*System.out.println(st.cropName + " " + st.cropStage +
                         " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
-                        " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction);
-                    logAgent.append(st.cropName + " " + st.cropStage +
+                        " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction);*/
+                    resultLog.append(st.cropName + " " + st.cropStage +
                         " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
                         " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction + "\n");
                 }   
-                System.out.println("Actual reduction is: " + actualReduction);
-                logAgent.append("Actual reduction is: " + actualReduction + "\n");
-                logAgent.append("\n");
-            
+                //System.out.println("Actual reduction is: " + actualReduction);
+                resultLog.append("Actual reduction is: " + actualReduction + "\n");
+                resultLog.append("\n");
+                
+                
                 //Clean parameter
                 calCrops.resultList.clear();
                 calCrops.calList.clear();
@@ -204,8 +201,14 @@ public class Farmer extends Agent{
                     farmerInfo.agentType = "seller";
                     farmerInfo.waterVolumn = actualReduction;
                 }
+                
+                
             }
         } );
+        
+        String result = resultLog.toString();
+        
+        return result;
     }
     
     /*
@@ -240,7 +243,8 @@ public class Farmer extends Agent{
                     reply.setContent("do not water for sale");
                 }
                 myAgent.send(reply);
-                System.out.println(log);
+                myGui.displayUI(log + "\n");
+                //System.out.println(log);
             }else {
                 block();
             }
@@ -264,12 +268,15 @@ public class Farmer extends Agent{
                 if (farmerInfo.sellingStatus=="avalable") {
                 	farmerInfo.sellingStatus = "sold";
                 	reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(getAID().getName()+" sold water to agent "+msg.getSender().getName());
-                    System.out.println(farmerInfo.sellingStatus);
+                    //System.out.println(getAID().getName()+" sold water to agent "+msg.getSender().getName());
+                    myGui.displayUI(getAID()+" sold water to agent "+msg.getSender().getName());
+                    myGui.displayUI(farmerInfo.sellingStatus.toString());
+                    //System.out.println(farmerInfo.sellingStatus);
 				} else {
 					// The requested book has been sold to another buyer in the meanwhile .
                     reply.setPerformative(ACLMessage.FAILURE);
                     reply.setContent("not-available for sale");
+                    myGui.displayUI("not avalable to sell");
 				}
                 
             }else {
@@ -319,7 +326,7 @@ public class Farmer extends Agent{
 	          			
 	            		// This is the best offer at present
 	            		bestPrice = volumn;
-	            		System.out.println(volumn);
+	            		//System.out.println(volumn);
 	            		bestSeller = reply.getSender();
 	          		}
 	        	}
@@ -358,10 +365,13 @@ public class Farmer extends Agent{
 	          		// Purchase successful. We can terminate
 	          		System.out.println(farmerInfo.farmerName +" successfully purchased from agent "+reply.getSender().getName());
 	          		System.out.println("Price = "+bestPrice);
+	          		myGui.displayUI(farmerInfo.farmerName +" successfully purchased from agent "+reply.getSender().getName().toString());
+	          		myGui.displayUI("Price = " + bestPrice);
 	          		myAgent.doDelete();
 	        	}
 	        	else {
 	          		System.out.println("Attempt failed: requested water volumn already sold.");
+	          		myGui.displayUI("Attempt failed: requested water volumn already sold.");
 	        	}
 	        	
 	        	step = 4;
@@ -376,6 +386,7 @@ public class Farmer extends Agent{
 	public boolean done() {
 	  	if (step == 2 && bestSeller == null) {
 	  		System.out.println("Attempt failed: "+volumeToBuy+" not available for sale");
+	  		myGui.displayUI("Attempt failed: "+ volumeToBuy +" not available for sale".toString());
 	  	}
 	    return ((step == 2 && bestSeller == null) || step == 4);
 	}
