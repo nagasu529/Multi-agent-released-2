@@ -156,7 +156,7 @@ public class FarmerGUI extends JFrame{
 				try {
 					String actualReduc = actualReducField.getText().trim();
 		            setActualReduc(Double.parseDouble(actualReduc));
-		            displayUI(myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason()));
+		            myAgent.farmerInput(getFileDir(), getActualReduc(),getEtSeason());
 		            //fileDirField.setText("");
 		            actualReducField.setText("");
 		            

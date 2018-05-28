@@ -139,8 +139,8 @@ public class Farmer extends Agent{
     }
     
     //Update input data from GUI which include water allocation on single farm.
-    public String farmerInput(final String filenameGlob, final Double actualRate, final int etSeason) {
-    	StringBuilder resultLog = new StringBuilder();
+    public void farmerInput(final String filenameGlob, final Double actualRate, final int etSeason) {
+    	StringBuilder resultCal = new StringBuilder();
     	
         addBehaviour(new OneShotBehaviour() {
             public void action() {
@@ -169,9 +169,11 @@ public class Farmer extends Agent{
                 calCrops.ET = calCrops.avgET0;
                 calCrops.farmFactorValues();
                 double actualReduction = calCrops.calcWaterReduction(totalWaterReductionPctg);
-                resultLog.append("\n");
-                resultLog.append("Water reduction result:\n");
-                resultLog.append("\n");
+                resultCal.append("\n");
+                resultCal.append("Water reduction result:\n");
+                resultCal.append("\n");
+                resultCal.append("Actual reducion is:" + actualReduction + "\n");
+                //myGui.displayUI(xx.toString());
             
                 //Result calculation
                 Iterator itrR=calCrops.resultList.iterator();
@@ -180,15 +182,18 @@ public class Farmer extends Agent{
                     /*System.out.println(st.cropName + " " + st.cropStage +
                         " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
                         " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction);*/
-                    resultLog.append(st.cropName + " " + st.cropStage +
+                    resultCal.append(st.cropName + " " + st.cropStage +
                         " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
                         " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction + "\n");
                 }   
                 //System.out.println("Actual reduction is: " + actualReduction);
-                resultLog.append("Actual reduction is: " + actualReduction + "\n");
-                resultLog.append("\n");
+                resultCal.append("Actual reduction is: " + actualReduction + "\n");
+                resultCal.append("\n");
                 
-                
+                if (actualReduction >= (calCrops.totalWaterReq*totalWaterReductionPctg)) {
+                    farmerInfo.agentType = "seller";
+                    farmerInfo.waterVolumn = actualReduction;
+                myGui.displayUI(resultCal.toString());
                 //Clean parameter
                 calCrops.resultList.clear();
                 calCrops.calList.clear();
@@ -197,18 +202,9 @@ public class Farmer extends Agent{
                 calCrops.ds.clear();
                 calCrops.order.clear();
                 calCrops.st.clear();
-                if (actualReduction >= (calCrops.totalWaterReq*totalWaterReductionPctg)) {
-                    farmerInfo.agentType = "seller";
-                    farmerInfo.waterVolumn = actualReduction;
                 }
-                
-                
             }
         } );
-        
-        String result = resultLog.toString();
-        
-        return result;
     }
     
     /*
