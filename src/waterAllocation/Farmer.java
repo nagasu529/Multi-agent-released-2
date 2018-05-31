@@ -16,6 +16,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
+import java.text.DecimalFormat;
 import java.util.*;
 /**
  *
@@ -32,6 +33,7 @@ public class Farmer extends Agent{
     double volumeToBuy;
     double sellingPrice;
     double buyingPrice;
+    DecimalFormat df = new DecimalFormat("#.##");
     
     //The list of known water selling agent
     private AID[] sellerAgent;
@@ -183,8 +185,9 @@ public class Farmer extends Agent{
                         " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
                         " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction);*/
                     resultCal.append(st.cropName + " " + st.cropStage +
-                        " " + st.droubhtSensitivity + " " + st.dsValue + " " + st.stValue + " " + st.cvValue +
-                        " " + st.literPerSecHec + " " + st.waterReq + " " + st.cropCoefficient + " " + st.waterReduction + "\n");
+                        " " + st.droubhtSensitivity + " " + df.format(st.dsValue) + " " + df.format(st.stValue) + " " + df.format(st.cvValue) +
+                        " " + df.format(st.literPerSecHec) + " " + df.format(st.waterReq) + " " + df.format(st.soilWaterContainValue) + " " + df.format(st.waterReqWithSoil) +
+                        " " + df.format(st.cropCoefficient) + " " + df.format(st.waterReduction) + "\n");
                 }   
                 //System.out.println("Actual reduction is: " + actualReduction);
                 resultCal.append("Actual reduction is: " + actualReduction + "\n");
@@ -259,15 +262,15 @@ public class Farmer extends Agent{
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
                 // ACCEPT_PROPOSAL Message received. Process it
-                String title = msg.getContent();
                 ACLMessage reply = msg.createReply();
+                reply.setPerformative(ACLMessage.INFORM);
                 if (farmerInfo.sellingStatus=="avalable") {
                 	farmerInfo.sellingStatus = "sold";
-                	reply.setPerformative(ACLMessage.INFORM);
                     //System.out.println(getAID().getName()+" sold water to agent "+msg.getSender().getName());
-                    myGui.displayUI(getAID()+" sold water to agent "+msg.getSender().getName());
-                    myGui.displayUI(farmerInfo.sellingStatus.toString());
+                    myGui.displayUI(getAID().getLocalName()+" sold water to agent "+msg.getSender().getLocalName());
+                    //myGui.displayUI(farmerInfo.sellingStatus.toString());
                     //System.out.println(farmerInfo.sellingStatus);
+                    doSuspend();
 				} else {
 					// The requested book has been sold to another buyer in the meanwhile .
                     reply.setPerformative(ACLMessage.FAILURE);
@@ -363,7 +366,8 @@ public class Farmer extends Agent{
 	          		System.out.println("Price = "+bestPrice);
 	          		myGui.displayUI(farmerInfo.farmerName +" successfully purchased from agent "+reply.getSender().getName().toString());
 	          		myGui.displayUI("Price = " + bestPrice);
-	          		myAgent.doDelete();
+	          		doSuspend();
+	          		//myAgent.doDelete();
 	        	}
 	        	else {
 	          		System.out.println("Attempt failed: requested water volumn already sold.");
