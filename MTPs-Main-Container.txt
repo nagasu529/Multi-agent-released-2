@@ -1,5 +1,1 @@
-<<<<<<< Updated upstream
-http://10.40.147.112:7778/acc
-=======
 http://169.254.195.71:7778/acc
->>>>>>> Stashed changes
